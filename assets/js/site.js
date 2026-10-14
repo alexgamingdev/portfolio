@@ -19,24 +19,24 @@
       footerLinks: {home: "Über mich", about: "Kanäle", channels: "Kontakt", contact: "Startseite"},
       pages: {
         home: {
-          title: "Alexander Dennhoven (alexgamingdev) | Softwareentwickler & Creator",
-          description: "Alexander Dennhoven, online bekannt als alexgamingdev: Softwareentwickler und Content Creator. Entdecke Projekte, technische Einblicke und seine offiziellen Profile.",
-          keywords: "Alexander Dennhoven, alexgamingdev, Softwareentwickler, Softwareentwicklung, Softwarearchitektur, Open Source, Content Creator"
+          title: "Alexander Dennhoven | Softwareentwickler & Creator | alexgamingdev",
+          description: "Alexander Dennhoven, bekannt als alexgamingdev: Softwareentwickler und Content Creator mit Fokus auf moderne Softwareentwicklung, Open Source und verständliche Tech-Inhalte.",
+          keywords: "Alexander Dennhoven, alexgamingdev, Softwareentwickler, Softwareentwicklung, Softwarearchitektur, Open Source, Content Creator, Tech Content"
         },
         about: {
-          title: "Über mich | Alexander Dennhoven (alexgamingdev)",
-          description: "Lerne Alexander Dennhoven kennen: Softwareentwickler und Content Creator alexgamingdev. Mehr über seine Arbeitsweise, Werte und den Blick auf Softwareentwicklung.",
+          title: "Über mich | Alexander Dennhoven | Softwareentwickler & Creator",
+          description: "Mehr über Alexander Dennhoven, bekannt als alexgamingdev: Softwareentwicklung, Architektur, Content Creation und der Blick auf gute digitale Produkte.",
           keywords: "Alexander Dennhoven, alexgamingdev, Über mich, Softwareentwickler, Softwarearchitektur, Content Creator, Softwareentwicklung"
         },
         channels: {
-          title: "Kanäle & Profile | alexgamingdev",
-          description: "Alle offiziellen Profile von Alexander Dennhoven (alexgamingdev): GitHub, YouTube, BlueSky, LinkedIn und weitere Netzwerke.",
-          keywords: "alexgamingdev Social Media, Alexander Dennhoven Profile, GitHub, YouTube, BlueSky, LinkedIn, Twitch, Instagram, TikTok"
+          title: "Kanäle & Profile | alexgamingdev | GitHub, YouTube & mehr",
+          description: "Alle offiziellen Profile von Alexander Dennhoven: GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch und weitere soziale und technische Kanäle.",
+          keywords: "alexgamingdev, Alexander Dennhoven, GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch, TikTok, Entwicklerprofil"
         },
         contact: {
-          title: "Kontakt | Alexander Dennhoven (alexgamingdev)",
-          description: "Kontakt zu Alexander Dennhoven (alexgamingdev) für Zusammenarbeit, Freelance-Anfragen, technische Ideen und Vernetzung.",
-          keywords: "Alexander Dennhoven kontaktieren, alexgamingdev, Zusammenarbeit, Freelance, Softwareentwicklung, Vernetzung"
+          title: "Kontakt | Alexander Dennhoven | Softwareentwickler & Content Creator",
+          description: "Kontakt zu Alexander Dennhoven, bekannt als alexgamingdev, für Zusammenarbeit, technische Ideen, Freelance und Vernetzung rund um Softwareentwicklung.",
+          keywords: "Alexander Dennhoven kontaktieren, alexgamingdev, Zusammenarbeit, Freelance, Softwareentwicklung, Vernetzung, Technik"
         }
       },
       homeContent: {
@@ -161,24 +161,24 @@
       footerLinks: {home: "About", about: "Channels", channels: "Contact", contact: "Home"},
       pages: {
         home: {
-          title: "Alexander Dennhoven (alexgamingdev) | Software Developer & Creator",
-          description: "Alexander Dennhoven, known online as alexgamingdev: software developer and content creator. Explore projects, technical insights and his official profiles.",
-          keywords: "Alexander Dennhoven, alexgamingdev, software developer, software development, software architecture, open source, content creator"
+          title: "Alexander Dennhoven | Software Developer & Creator | alexgamingdev",
+          description: "Alexander Dennhoven, known as alexgamingdev: software developer and creator focused on modern software engineering, open source and clear tech storytelling.",
+          keywords: "Alexander Dennhoven, alexgamingdev, software developer, software engineering, software architecture, open source, content creator, tech content"
         },
         about: {
-          title: "About | Alexander Dennhoven (alexgamingdev)",
-          description: "Meet Alexander Dennhoven, software developer and content creator alexgamingdev. Learn about his approach, values and perspective on software development.",
-          keywords: "Alexander Dennhoven, alexgamingdev, about, software developer, software architecture, content creator, software development"
+          title: "About | Alexander Dennhoven | Software Developer & Creator",
+          description: "Learn more about Alexander Dennhoven, known as alexgamingdev, and his approach to software engineering, architecture and digital storytelling.",
+          keywords: "Alexander Dennhoven, alexgamingdev, about, software developer, software architecture, content creator, software engineering"
         },
         channels: {
-          title: "Channels & Profiles | alexgamingdev",
-          description: "Official profiles of Alexander Dennhoven (alexgamingdev): GitHub, YouTube, BlueSky, LinkedIn and more.",
-          keywords: "alexgamingdev social media, Alexander Dennhoven profiles, GitHub, YouTube, BlueSky, LinkedIn, Twitch, Instagram, TikTok"
+          title: "Channels & Profiles | alexgamingdev | GitHub, YouTube & more",
+          description: "Official profiles of Alexander Dennhoven: GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch and other social and developer channels.",
+          keywords: "alexgamingdev, Alexander Dennhoven, GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch, TikTok, developer profile"
         },
         contact: {
-          title: "Contact | Alexander Dennhoven (alexgamingdev)",
-          description: "Contact Alexander Dennhoven (alexgamingdev) about collaboration, freelance opportunities, technical ideas and networking.",
-          keywords: "contact Alexander Dennhoven, alexgamingdev, collaboration, freelance, software development, networking"
+          title: "Contact | Alexander Dennhoven | Software Developer & Content Creator",
+          description: "Contact Alexander Dennhoven, known as alexgamingdev, for collaboration, technical ideas, freelance work and networking in software development.",
+          keywords: "contact Alexander Dennhoven, alexgamingdev, collaboration, freelance, software development, networking, technology"
         }
       },
       homeContent: {
@@ -472,8 +472,10 @@
     document.querySelectorAll(".profile-link").forEach((card, index) => {
       const [description, label, translatedName] = copy.items[index];
       if (translatedName) card.querySelector("strong").textContent = translatedName;
-      card.querySelector("span:nth-of-type(1)").textContent = description;
-      card.querySelector("span:nth-of-type(2)").textContent = `${label} ↗`;
+      const descriptionElement = card.querySelector(".profile-description");
+      const urlElement = card.querySelector(".profile-url");
+      if (descriptionElement) descriptionElement.textContent = description;
+      if (urlElement) urlElement.textContent = label;
     });
   }
 

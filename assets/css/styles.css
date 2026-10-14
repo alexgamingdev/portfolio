@@ -735,19 +735,11 @@ p {
   font-weight: 500;
 }
 
-.icon-youtube {
-  color: #ff8078;
-}
-
-.icon-bluesky {
-  color: #83baff;
-  font-size: 20px;
-}
-
-.icon-linkedin {
-  color: #82b7ff;
-  font-size: 14px;
-  font-weight: 700;
+.channel-icon svg {
+  width: 21px;
+  height: 21px;
+  fill: currentColor;
+  color: var(--accent);
 }
 
 .external-arrow {
@@ -935,11 +927,66 @@ p {
   font-size: 15px;
 }
 
-.profile-link span {
+.profile-title {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  fill: currentColor;
+  color: var(--accent);
+}
+
+.profile-icon-text {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--accent);
+  font: 500 10px var(--mono);
+}
+
+.profile-link > span:not(.profile-title) {
   color: var(--muted);
   font-family: var(--mono);
   font-size: 9px;
   overflow-wrap: anywhere;
+}
+
+.profile-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+}
+
+.profile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.profile-badge svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.profile-link .profile-title strong {
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
 }
 
 body.a11y-mode {
