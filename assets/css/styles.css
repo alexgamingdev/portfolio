@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: dark;
-  --bg: #111612;
+  --bg: #000000;
   --surface: #171e19;
   --surface-light: #202923;
   --text: #f0f2ec;
@@ -36,29 +36,42 @@ html {
 
 body {
   margin: 0;
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
 }
 
-.cursor-aura {
+.cursor-smoke {
   position: fixed;
   z-index: 0;
-  top: 0;
-  left: 0;
-  width: 460px;
-  height: 460px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 190, 255, 0.14) 0, rgba(0, 130, 255, 0.08) 34%, rgba(0, 255, 255, 0) 72%);
-  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  transition: opacity 450ms ease;
-  will-change: transform;
 }
 
-.cursor-aura.is-active {
-  opacity: 1;
+body > header,
+body > main,
+body > footer {
+  position: relative;
+  z-index: 1;
+}
+
+.ui-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  vertical-align: -0.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 a {
@@ -112,7 +125,7 @@ body.text-response {
   z-index: 5;
   top: 0;
   border-bottom: 1px solid var(--line);
-  background: rgba(17, 22, 18, 0.88);
+  background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(16px);
 }
 
@@ -336,6 +349,58 @@ p {
   background: #73ffff;
 }
 
+.contact-form {
+  display: grid;
+  max-width: 680px;
+  margin-block: 28px 36px;
+  gap: 20px;
+}
+
+.contact-form h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #080b09;
+  color: var(--text);
+  font: 12px/1.6 var(--sans);
+}
+
+.form-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-field input:focus-visible,
+.form-field textarea:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.contact-form button {
+  justify-self: start;
+  cursor: pointer;
+}
+
 .text-link,
 .inline-link {
   display: inline-flex;
@@ -404,8 +469,12 @@ p {
 
 .visual-glow {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: 260px;
   height: 260px;
+  margin-top: -130px;
+  margin-left: -130px;
   border-radius: 50%;
   background: rgba(0, 255, 255, 0.11);
   filter: blur(60px);
@@ -414,16 +483,19 @@ p {
 
 .visual-orbit {
   position: absolute;
-  width: 350px;
-  height: 350px;
+  top: 50%;
+  left: 50%;
+  width: min(400px, calc(100% + 50px));
+  aspect-ratio: 1;
+  height: auto;
+  translate: -50% -50%;
   border: 1px solid rgba(0, 255, 255, 0.11);
   border-radius: 50%;
   animation: orbit-rotate 34s linear infinite;
 }
 
 .orbit-two {
-  width: 430px;
-  height: 430px;
+  width: min(480px, calc(100% + 50px));
   border-color: rgba(229, 237, 226, 0.07);
   animation-direction: reverse;
   animation-duration: 48s;
@@ -480,8 +552,12 @@ p {
 }
 
 .card-symbol {
+  display: inline-flex;
+  width: 19px;
+  height: 19px;
+  align-items: center;
+  justify-content: center;
   color: var(--accent);
-  font-size: 19px;
 }
 
 .monogram {
@@ -530,8 +606,12 @@ p {
 }
 
 .card-arrow {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
   color: var(--accent);
-  font-size: 18px;
 }
 
 .orbit-caption {
@@ -552,26 +632,9 @@ p {
   left: 0;
 }
 
-.visual-cross {
-  position: absolute;
-  color: var(--accent);
-  font-size: 19px;
-}
-
-.cross-one {
-  top: 27px;
-  left: 17%;
-}
-
-.cross-two {
-  right: 15%;
-  bottom: 23px;
-  color: var(--quiet);
-}
-
 .intro-strip {
   border-block: 1px solid var(--line);
-  background: #151b16;
+  background: #000;
 }
 
 .strip-inner {
@@ -598,8 +661,10 @@ p {
 }
 
 .strip-separator {
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
   color: var(--quiet);
-  font-size: 10px;
 }
 
 .section-spacing {
@@ -654,7 +719,7 @@ p {
   border-block: 1px solid var(--line);
   background:
     radial-gradient(ellipse at 82% 0%, rgba(0, 255, 255, 0.045), transparent 36%),
-    #151b16;
+    #000;
 }
 
 .channels-heading {
@@ -744,8 +809,9 @@ p {
 
 .external-arrow {
   align-self: flex-start;
+  width: 15px;
+  height: 15px;
   color: var(--quiet);
-  font-size: 15px;
   transition: color 160ms ease, transform 160ms ease;
 }
 
@@ -991,9 +1057,52 @@ p {
 
 body.a11y-mode {
   font-size: 118%;
-  --muted: #d0dad1;
-  --quiet: #bdc9bf;
-  --line: rgba(229, 237, 226, 0.28);
+  --bg: #071426;
+  --surface: #102744;
+  --surface-light: #1a385b;
+  --text: #ffffff;
+  --muted: #e5edf7;
+  --quiet: #c7d7e9;
+  --accent: #ffb000;
+  --accent-dark: #452900;
+  --line: rgba(255, 255, 255, 0.32);
+}
+
+body.a11y-mode .cursor-smoke {
+  display: none;
+}
+
+body.a11y-mode ::selection,
+body.a11y-mode ::-moz-selection {
+  background: #ffb000;
+  color: #071426;
+}
+
+body.a11y-mode .button-primary {
+  color: #071426;
+}
+
+body.a11y-mode .visual-orbit,
+body.a11y-mode .orbit-two,
+body.a11y-mode .profile-card::after {
+  border-color: rgba(255, 176, 0, 0.42);
+}
+
+body.a11y-mode .profile-card {
+  border-color: rgba(255, 255, 255, 0.45);
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(255, 176, 0, 0.18), transparent 42%),
+    linear-gradient(145deg, #18395d, #102744 70%);
+}
+
+body.a11y-mode .profile-card:hover {
+  border-color: #ffb000;
+  box-shadow: 0 0 0 2px #ffb000;
+}
+
+body.a11y-mode .profile-logo {
+  border-color: #ffb000;
+  box-shadow: 0 0 0 2px #ffb000;
 }
 
 body.a11y-mode p,
@@ -1025,7 +1134,7 @@ body.a11y-mode .eyebrow,
 body.a11y-mode .channel-type,
 body.a11y-mode .channel-url,
 body.a11y-mode .profile-link span {
-  color: #d0dad1;
+  color: #ffcf66;
 }
 
 .footer-inner {

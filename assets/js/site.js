@@ -2,7 +2,9 @@
   const params = new URLSearchParams(window.location.search);
   const page = document.body.dataset.page || "home";
   const main = document.querySelector("main");
-  const language = params.get("lang") === "en" ? "en" : "de";
+  const iconSpriteUrl = new URL("../icons.svg", document.currentScript.src).href;
+  const language = params.get("lang") === "de" ? "de" : "en";
+  const iconSvg = name => `<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="${iconSpriteUrl}#${name}"></use></svg>`;
 
   const translations = {
     de: {
@@ -15,7 +17,7 @@
       languageLabel: "Sprache auswählen",
       accessibilityLabel: "Barrierefreiheit umschalten",
       accessibility: "Barrierefrei",
-      footer: "Mit Neugier entwickelt. Mit Begeisterung geteilt.",
+      footer: "© 2026 alexgamingdev",
       footerLinks: {home: "Über mich", about: "Kanäle", channels: "Kontakt", contact: "Startseite"},
       pages: {
         home: {
@@ -43,13 +45,13 @@
         role: '<span class="status-dot"></span> Softwareentwickler <span class="eyebrow-divider">/</span> Content Creator',
         hero: "Gute Software bauen.<br>Wissen teilen.<br><span>Ideen weiterbringen.</span>",
         intro: 'Ich bin <strong>Alexander Dennhoven</strong> – online als <strong>alexgamingdev</strong> unterwegs. Ich entwickle Software, beschäftige mich mit durchdachter Architektur und mache komplexe technische Themen verständlich.',
-        channelsCta: 'Meine Kanäle entdecken <span aria-hidden="true">↗</span>',
-        aboutCta: 'Mehr über mich <span aria-hidden="true">→</span>',
+        channelsCta: `Meine Kanäle entdecken ${iconSvg("arrow-up-right")}`,
+        aboutCta: `Mehr über mich ${iconSvg("arrow-right")}`,
         note: "Neugierig bleiben. Klar denken. Mit Sorgfalt entwickeln.",
         visualLabel: "Persönliches Entwicklerprofil",
         cardLabel: "DIGITALER HANDWERKER",
-        orbitTop: "IDEEN → CODE",
-        orbitBottom: "CODE → VERSTÄNDNIS",
+        orbitTop: `IDEEN ${iconSvg("arrow-right")} CODE`,
+        orbitBottom: `CODE ${iconSvg("arrow-right")} VERSTÄNDNIS`,
         workflowLabel: "Arbeitsweise",
         workflow: ["Probleme verstehen", "Lösungen durchdenken", "Wissen weitergeben"],
         aboutEyebrow: "HINTER DEM HANDLE",
@@ -59,7 +61,7 @@
           "Gute Entwicklung heißt für mich, Zusammenhänge zu verstehen, sorgfältig zu gestalten und Lösungen so umzusetzen, dass sie nachvollziehbar und langfristig weiterentwickelbar bleiben. Sauberer Code und durchdachte Architektur helfen, Ideen in Software zu verwandeln, die Menschen wirklich nutzen können.",
           "Diese Begeisterung teile ich als Content Creator. In meinen Videos mache ich technische Themen zugänglich. Auf GitHub können Projekte und Entwicklungsarbeit offen entdeckt werden."
         ],
-        aboutLink: 'Mehr über meine Arbeitsweise <span aria-hidden="true">↗</span>',
+        aboutLink: `Mehr über meine Arbeitsweise ${iconSvg("arrow-up-right")}`,
         channelsEyebrow: "FINDE MICH ONLINE",
         channelsTitle: "Ideen, Einblicke<br><span>und Austausch.</span>",
         channelsSummary: "Code, Videos und Gespräche aus der Entwickler-Community – alle meine Kanäle an einem Ort.",
@@ -70,11 +72,11 @@
           "Neuigkeiten und Austausch mit der Community.",
           "Berufliche Einblicke und Gespräche über Zusammenarbeit."
         ],
-        allProfiles: 'Alle Social-Profile ansehen <span aria-hidden="true">↗</span>',
+        allProfiles: `Alle Social-Profile ansehen ${iconSvg("arrow-up-right")}`,
         contactEyebrow: "GUTE IDEEN SIND TEAMWORK",
         contactTitle: "Was können wir<br><span>gemeinsam bauen?</span>",
         contactIntro: "Du hast eine Idee, möchtest über Zusammenarbeit sprechen oder dich einfach vernetzen? Ich freue mich auf den Austausch.",
-        contactCta: 'Kontakt aufnehmen <span aria-hidden="true">↗</span>',
+        contactCta: `Kontakt aufnehmen ${iconSvg("arrow-up-right")}`,
         linkedIn: "LinkedIn-Profil ansehen"
       },
       aboutContent: {
@@ -102,9 +104,9 @@
           ]
         ],
         links: [
-          'Zum YouTube-Kanal <span aria-hidden="true">↗</span>',
-          'Zu GitHub <span aria-hidden="true">↗</span>',
-          'Kontaktmöglichkeiten ansehen <span aria-hidden="true">↗</span>'
+          `Zum YouTube-Kanal ${iconSvg("arrow-up-right")}`,
+          `Zu GitHub ${iconSvg("arrow-up-right")}`,
+          `Kontaktmöglichkeiten ansehen ${iconSvg("arrow-up-right")}`
         ]
       },
       channelsContent: {
@@ -132,19 +134,19 @@
       contactContent: {
         eyebrow: "KONTAKT & ZUSAMMENARBEIT",
         title: 'Eine gute Idee<br><span style="color:var(--accent)">fängt mit einem Gespräch an.</span>',
-        intro: "Du planst ein Projekt, suchst einen Sparringspartner für eine technische Idee oder möchtest dich vernetzen? Schreib mir über eines meiner Profile.",
+        intro: "Du planst ein Projekt, suchst einen Sparringspartner für eine technische Idee oder möchtest dich vernetzen? Schreib mir über das Formular oder eines meiner Profile.",
         headings: ["Worüber wir sprechen können", "Vorher noch stöbern?"],
-        paragraphs: [
-          [
-            "Zusammenarbeit an spannenden Softwareprojekten, technische Konzepte und Architektur, Freelance-Anfragen oder der Austausch rund um moderne Softwareentwicklung und Content Creation.",
-            "Am besten erreichst du mich über LinkedIn oder BlueSky. Ich freue mich darauf, mehr über deine Idee zu erfahren."
-          ],
-          [
-            "Auf meiner Kanäle-Seite findest du alle Social- und Entwicklerprofile. Mehr über mich und meine Arbeitsweise gibt es auf der Über-mich-Seite."
-          ]
-        ],
-        linkedIn: 'Auf LinkedIn vernetzen <span aria-hidden="true">↗</span>',
-        bluesky: 'Auf BlueSky schreiben <span aria-hidden="true">↗</span>'
+        description: "Zusammenarbeit an spannenden Softwareprojekten, technische Konzepte und Architektur, Freelance-Anfragen oder der Austausch rund um moderne Softwareentwicklung und Content Creation.",
+        form: {
+          heading: "Nachricht senden",
+          name: "Dein Name",
+          email: "E-Mail-Adresse",
+          subject: "Betreff (optional)",
+          message: "Nachricht",
+          submit: "Nachricht senden"
+        },
+        linkedIn: `Auf LinkedIn vernetzen ${iconSvg("arrow-up-right")}`,
+        bluesky: `Auf BlueSky schreiben ${iconSvg("arrow-up-right")}`
       }
     },
     en: {
@@ -157,7 +159,7 @@
       languageLabel: "Choose language",
       accessibilityLabel: "Toggle accessibility mode",
       accessibility: "Accessibility",
-      footer: "Built with curiosity. Shared with enthusiasm.",
+      footer: "© 2026 alexgamingdev",
       footerLinks: {home: "About", about: "Channels", channels: "Contact", contact: "Home"},
       pages: {
         home: {
@@ -185,13 +187,13 @@
         role: '<span class="status-dot"></span> Software Developer <span class="eyebrow-divider">/</span> Content Creator',
         hero: "Build great software.<br>Share what you learn.<br><span>Move ideas forward.</span>",
         intro: 'I’m <strong>Alexander Dennhoven</strong> – known online as <strong>alexgamingdev</strong>. I build software, think about thoughtful architecture and make complex technical topics easier to understand.',
-        channelsCta: 'Explore my channels <span aria-hidden="true">↗</span>',
-        aboutCta: 'More about me <span aria-hidden="true">→</span>',
+        channelsCta: `Explore my channels ${iconSvg("arrow-up-right")}`,
+        aboutCta: `More about me ${iconSvg("arrow-right")}`,
         note: "Stay curious. Think clearly. Build with care.",
         visualLabel: "Developer profile",
         cardLabel: "DIGITAL CRAFTSMAN",
-        orbitTop: "IDEAS → CODE",
-        orbitBottom: "CODE → UNDERSTANDING",
+        orbitTop: `IDEAS ${iconSvg("arrow-right")} CODE`,
+        orbitBottom: `CODE ${iconSvg("arrow-right")} UNDERSTANDING`,
         workflowLabel: "How I work",
         workflow: ["Understand the problem", "Think through solutions", "Share what I learn"],
         aboutEyebrow: "BEHIND THE HANDLE",
@@ -201,7 +203,7 @@
           "Good development means understanding the context, making thoughtful decisions and building solutions that remain clear and maintainable over time. Clean code and considered architecture help turn ideas into software people can actually use.",
           "I share that enthusiasm as a creator. My videos make technical topics approachable, while GitHub offers an open look at my projects and development work."
         ],
-        aboutLink: 'More about how I work <span aria-hidden="true">↗</span>',
+        aboutLink: `More about how I work ${iconSvg("arrow-up-right")}`,
         channelsEyebrow: "FIND ME ONLINE",
         channelsTitle: "Ideas, insights<br><span>and conversations.</span>",
         channelsSummary: "Code, videos and conversations with the developer community – all my channels in one place.",
@@ -212,11 +214,11 @@
           "Updates and conversations with the community.",
           "Professional updates and conversations about working together."
         ],
-        allProfiles: 'Explore all social profiles <span aria-hidden="true">↗</span>',
+        allProfiles: `Explore all social profiles ${iconSvg("arrow-up-right")}`,
         contactEyebrow: "GREAT IDEAS ARE A TEAM EFFORT",
         contactTitle: "What could we<br><span>build together?</span>",
         contactIntro: "Have an idea, want to discuss working together or simply connect? I’d love to hear from you.",
-        contactCta: 'Get in touch <span aria-hidden="true">↗</span>',
+        contactCta: `Get in touch ${iconSvg("arrow-up-right")}`,
         linkedIn: "View my LinkedIn profile"
       },
       aboutContent: {
@@ -244,9 +246,9 @@
           ]
         ],
         links: [
-          'Visit my YouTube channel <span aria-hidden="true">↗</span>',
-          'Visit GitHub <span aria-hidden="true">↗</span>',
-          'See how to get in touch <span aria-hidden="true">↗</span>'
+          `Visit my YouTube channel ${iconSvg("arrow-up-right")}`,
+          `Visit GitHub ${iconSvg("arrow-up-right")}`,
+          `See how to get in touch ${iconSvg("arrow-up-right")}`
         ]
       },
       channelsContent: {
@@ -274,19 +276,19 @@
       contactContent: {
         eyebrow: "CONTACT & COLLABORATION",
         title: 'Every good idea<br><span>starts with a conversation.</span>',
-        intro: "Planning a project, looking for a sounding board for a technical idea or simply want to connect? Reach out through one of my profiles.",
+        intro: "Planning a project, looking for a sounding board for a technical idea, or simply want to connect? Send me a message using the form or reach out through one of my profiles.",
         headings: ["What we could talk about", "Want to explore first?"],
-        paragraphs: [
-          [
-            "Collaborating on interesting software projects, technical concepts and architecture, freelance opportunities, or exchanging ideas about modern software development and content creation.",
-            "LinkedIn or BlueSky are the best ways to reach me. I’d love to hear more about your idea."
-          ],
-          [
-            "Visit my channels page for all my social and developer profiles. Learn more about me and my approach on the about page."
-          ]
-        ],
-        linkedIn: 'Connect on LinkedIn <span aria-hidden="true">↗</span>',
-        bluesky: 'Message me on BlueSky <span aria-hidden="true">↗</span>'
+        description: "Collaborating on interesting software projects, technical concepts and architecture, freelance opportunities, or exchanging ideas about modern software development and content creation.",
+        form: {
+          heading: "Send me a message",
+          name: "Your name",
+          email: "Email address",
+          subject: "Subject (optional)",
+          message: "Message",
+          submit: "Send message"
+        },
+        linkedIn: `Connect on LinkedIn ${iconSvg("arrow-up-right")}`,
+        bluesky: `Message me on BlueSky ${iconSvg("arrow-up-right")}`
       }
     }
   };
@@ -306,9 +308,6 @@
   }
 
   let revealObserver;
-  let cursorAura;
-  let cursorFrame = 0;
-  let cursorPosition = {x: -500, y: -500};
 
   function motionAllowed() {
     return !document.body.classList.contains("a11y-mode")
@@ -340,36 +339,6 @@
     });
   }
 
-  function renderCursorAura() {
-    if (!cursorAura || !motionAllowed() || !window.matchMedia("(pointer: fine)").matches) return;
-    cursorAura.style.transform = `translate3d(${cursorPosition.x}px, ${cursorPosition.y}px, 0) translate(-50%, -50%)`;
-    cursorAura.classList.add("is-active");
-    cursorFrame = 0;
-  }
-
-  function setupCursorAura() {
-    const enabled = motionAllowed() && window.matchMedia("(pointer: fine)").matches;
-    if (!enabled) {
-      cursorAura?.remove();
-      cursorAura = null;
-      return;
-    }
-
-    if (!cursorAura) {
-      cursorAura = document.createElement("div");
-      cursorAura.className = "cursor-aura";
-      cursorAura.setAttribute("aria-hidden", "true");
-      document.body.append(cursorAura);
-    }
-  }
-
-  document.addEventListener("pointermove", event => {
-    if (!cursorAura) return;
-    cursorPosition = {x: event.clientX, y: event.clientY};
-    cursorAura.classList.remove("is-active");
-    if (!cursorFrame) cursorFrame = window.requestAnimationFrame(renderCursorAura);
-  }, {passive: true});
-
   function setText(selector, value, html = false) {
     const element = document.querySelector(selector);
     if (!element) return;
@@ -385,7 +354,7 @@
     nav.querySelector('a[href*="about"]').textContent = copy.about;
     nav.querySelector('a[href*="channels"]').textContent = copy.channels;
     const contactLink = nav.querySelector(".nav-cta");
-    contactLink.innerHTML = `${copy.contact} <span aria-hidden="true">↗</span>`;
+    contactLink.innerHTML = `${copy.contact} ${iconSvg("arrow-up-right")}`;
     document.querySelector(".brand").setAttribute("aria-label", `alexgamingdev – ${copy.home}`);
     document.querySelector(".language-switch").setAttribute("aria-label", copy.languageLabel);
     document.querySelectorAll(".language-switch a").forEach(link => {
@@ -401,7 +370,7 @@
     accessibilityButton.setAttribute("aria-label", copy.accessibilityLabel);
     document.querySelector(".footer-inner > p").textContent = copy.footer;
     const footerLink = document.querySelector(".footer-inner .back-to-top");
-    if (footerLink) footerLink.innerHTML = `${copy.footerLinks[page]} <span aria-hidden="true">↗</span>`;
+    if (footerLink) footerLink.innerHTML = `${copy.footerLinks[page]} ${iconSvg("arrow-up-right")}`;
   }
 
   function applyHomeLanguage(copy) {
@@ -413,8 +382,8 @@
     setText(".hero-note p", copy.note);
     document.querySelector(".hero-visual").setAttribute("aria-label", copy.visualLabel);
     setText(".card-label", copy.cardLabel);
-    setText(".caption-top", copy.orbitTop);
-    setText(".caption-bottom", copy.orbitBottom);
+    setText(".caption-top", copy.orbitTop, true);
+    setText(".caption-bottom", copy.orbitBottom, true);
     const workflow = document.querySelector(".intro-strip");
     workflow.setAttribute("aria-label", copy.workflowLabel);
     workflow.querySelectorAll(".strip-inner p").forEach((item, index) => {
@@ -483,21 +452,27 @@
     setText(".subpage-hero .eyebrow", copy.eyebrow);
     setText(".subpage-hero h1", copy.title, true);
     setText(".subpage-hero > p:last-child", copy.intro);
-    document.querySelectorAll(".content-panel").forEach((panel, index) => {
-      panel.querySelector("h2").textContent = copy.headings[index];
-      panel.querySelectorAll("p").forEach((paragraph, paragraphIndex) => {
-        if (copy.paragraphs[index][paragraphIndex]) paragraph.textContent = copy.paragraphs[index][paragraphIndex];
-      });
+    document.querySelectorAll(".content-panel h2").forEach((heading, index) => {
+      heading.textContent = copy.headings[index];
     });
-    const browseParagraph = document.querySelectorAll(".content-panel")[1]?.querySelector("p");
+    const description = document.querySelector("[data-contact-description]");
+    if (description) description.textContent = copy.description;
+    const formHeading = document.querySelector("[data-form-heading]");
+    if (formHeading) formHeading.textContent = copy.form.heading;
+    document.querySelectorAll("[data-form-label]").forEach(element => {
+      const label = element.dataset.formLabel;
+      if (label && copy.form[label]) element.textContent = copy.form[label];
+    });
+    const browseParagraph = document.querySelector("[data-browse-paragraph]");
     if (browseParagraph) {
       browseParagraph.innerHTML = language === "en"
         ? 'Visit my <a href="../channels/">channels page</a> for all my social and developer profiles. Learn more about me and my approach on the <a href="../about/">about page</a>.'
         : 'Auf meiner <a href="../channels/">Kanäle-Seite</a> findest du alle Social- und Entwicklerprofile. Mehr über mich und meine Arbeitsweise gibt es auf der <a href="../about/">Über-mich-Seite</a>.';
     }
-    const ctaLinks = document.querySelectorAll(".content-panel a");
-    if (ctaLinks[0]) ctaLinks[0].innerHTML = copy.linkedIn;
-    if (ctaLinks[1]) ctaLinks[1].innerHTML = copy.bluesky;
+    const linkedIn = document.querySelector('[data-contact-link="linkedin"]');
+    const bluesky = document.querySelector('[data-contact-link="bluesky"]');
+    if (linkedIn) linkedIn.innerHTML = copy.linkedIn;
+    if (bluesky) bluesky.innerHTML = copy.bluesky;
   }
 
   function applyLanguage() {
@@ -630,45 +605,26 @@
 
   function setAccessibility(enabled, updateUrl) {
     document.body.classList.toggle("a11y-mode", enabled);
+    window.dispatchEvent(new CustomEvent("accessibilitymodechange", { detail: { enabled } }));
     const accessibilityButton = document.querySelector(".a11y-toggle");
     accessibilityButton?.setAttribute("aria-pressed", String(enabled));
     if (accessibilityButton) accessibilityButton.title = enabled
       ? translations[language].accessibilityLabel
       : translations[language].accessibility;
     setupScrollReveals();
-    setupCursorAura();
     if (updateUrl) {
       const updated = new URL(window.location.href);
       if (enabled) updated.searchParams.set("a11y", "true");
       else updated.searchParams.delete("a11y");
       window.history.replaceState({}, "", updated);
-      preservePreferencesInInternalLinks();
     }
-  }
-
-  function preservePreferencesInInternalLinks() {
-    const current = new URL(window.location.href);
-    document.querySelectorAll("a[href]").forEach(link => {
-      if (link.closest(".language-switch")) return;
-      const target = new URL(link.href, current);
-      if (target.origin !== current.origin || target.protocol !== current.protocol) return;
-      current.searchParams.forEach((value, key) => target.searchParams.set(key, value));
-      if (language === "en") target.searchParams.set("lang", "en");
-      else target.searchParams.delete("lang");
-      if (current.searchParams.get("a11y") === "true") target.searchParams.set("a11y", "true");
-      else target.searchParams.delete("a11y");
-      link.href = target.href;
-    });
   }
 
   applyLanguage();
   setAccessibility(params.get("a11y") === "true", false);
-  preservePreferencesInInternalLinks();
   window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", () => {
     setupScrollReveals();
-    setupCursorAura();
   });
-  window.matchMedia("(pointer: fine)").addEventListener("change", setupCursorAura);
   document.querySelector(".a11y-toggle")?.addEventListener("click", () => {
     const button = document.querySelector(".a11y-toggle");
     setAccessibility(button.getAttribute("aria-pressed") !== "true", true);
