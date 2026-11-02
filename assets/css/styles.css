@@ -152,7 +152,16 @@ body.text-response {
   flex: 0 0 auto;
   border-radius: 10px;
   object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
   box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.38), 0 0 18px rgba(0, 255, 255, 0.12);
+}
+
+.profile-logo {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .brand-name {
@@ -168,7 +177,10 @@ body.text-response {
 }
 
 .main-nav a,
-.back-to-top {
+.back-to-top,
+.footer-privacy,
+.footer-imprint,
+.footer-docs {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
@@ -178,6 +190,9 @@ body.text-response {
 
 .main-nav a:hover,
 .back-to-top:hover,
+.footer-privacy:hover,
+.footer-imprint:hover,
+.footer-docs:hover,
 .contact-secondary:hover {
   color: var(--accent);
 }
@@ -354,6 +369,35 @@ p {
   max-width: 680px;
   margin-block: 28px 36px;
   gap: 20px;
+}
+
+.contact-verification {
+  display: grid;
+  justify-items: start;
+  max-width: 520px;
+  margin-top: 20px;
+  gap: 12px;
+}
+
+.contact-verification[hidden] {
+  display: none;
+}
+
+.contact-verification-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.contact-verification-widget {
+  min-height: 65px;
+}
+
+.contact-verification-form {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .contact-form h3 {
@@ -964,6 +1008,157 @@ p {
   margin-bottom: 0;
 }
 
+.docs-layout {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.7fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.docs-toc {
+  position: sticky;
+  top: 100px;
+  display: grid;
+  margin-bottom: 80px;
+  padding: 22px;
+  gap: 13px;
+}
+
+.docs-toc > div {
+  display: grid;
+  gap: 13px;
+}
+
+.docs-toc > div[hidden] {
+  display: none;
+}
+
+.docs-toc .eyebrow {
+  margin: 0 0 4px;
+}
+
+.docs-toc a {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.docs-toc a:hover {
+  color: var(--accent);
+}
+
+.docs-section {
+  margin-bottom: 20px;
+  scroll-margin-top: 100px;
+}
+
+.docs-section > .eyebrow {
+  margin: 0 0 14px;
+}
+
+.docs-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.docs-card {
+  display: grid;
+  min-height: 135px;
+  padding: 17px;
+  align-content: start;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.docs-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.docs-card-index,
+.secret-sequence {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.7px;
+}
+
+.docs-card strong,
+.docs-feature strong {
+  font-size: 13px;
+}
+
+.docs-card > span:last-child {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.docs-list {
+  display: grid;
+  padding-left: 19px;
+  gap: 10px;
+}
+
+.docs-note {
+  margin-top: 20px;
+  padding: 13px 15px;
+  border-left: 2px solid var(--accent);
+  background: var(--bg);
+}
+
+.docs-feature {
+  padding-block: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.docs-feature p {
+  margin-bottom: 0;
+}
+
+.docs-secret {
+  background:
+    radial-gradient(ellipse at 90% 10%, rgba(0, 255, 255, 0.08), transparent 55%),
+    var(--surface);
+}
+
+.secret-sequence {
+  font-size: 16px;
+  letter-spacing: 3px;
+}
+
+.docs-section details {
+  padding-block: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.docs-section summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.docs-section details p {
+  margin: 12px 0 0;
+}
+
+body.arcade-mode:not(.a11y-mode) {
+  --accent: #ff62d4;
+  --accent-dark: #35102c;
+}
+
+body.arcade-mode:not(.a11y-mode) .docs-secret {
+  background:
+    radial-gradient(ellipse at 90% 10%, rgba(255, 98, 212, 0.15), transparent 55%),
+    var(--surface);
+}
+
 .profile-grid {
   display: grid;
   margin-bottom: 80px;
@@ -1302,6 +1497,15 @@ body.a11y-mode .profile-link span {
   .contact-section {
     padding-inline: 45px;
   }
+
+  .docs-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .docs-toc {
+    position: static;
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 650px) {
@@ -1466,6 +1670,14 @@ body.a11y-mode .profile-link span {
   .content-panel {
     margin-bottom: 55px;
     padding: 22px;
+  }
+
+  .docs-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-card {
+    min-height: 0;
   }
 
   .profile-grid {

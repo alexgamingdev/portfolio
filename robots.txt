@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://www.alexgamingdev.tech/sitemap.xml
+Sitemap: https://alexgaming.is-a.dev/sitemap.xml

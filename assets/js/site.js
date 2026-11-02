@@ -1,8 +1,34 @@
 (() => {
-  const params = new URLSearchParams(window.location.search);
+  const stateStorageKey = "alexgamingdev:url-state";
+  const obsoleteFormatParams = ["format", "type", "output"];
+  const currentUrl = new URL(window.location.href);
+  let params = new URLSearchParams(currentUrl.search);
+  try {
+    const savedState = localStorage.getItem(stateStorageKey);
+    if (savedState) {
+      const savedParams = new URLSearchParams(savedState);
+      savedParams.delete("probe");
+      obsoleteFormatParams.forEach(key => savedParams.delete(key));
+      savedParams.forEach((value, key) => {
+        if (!params.has(key)) params.set(key, value);
+      });
+    }
+  } catch (error) {
+    console.warn("Could not restore saved URL preferences.", error);
+  }
+  params.delete("probe");
+  obsoleteFormatParams.forEach(key => params.delete(key));
+  currentUrl.search = params.toString();
+  if (currentUrl.href !== window.location.href) window.history.replaceState({}, "", currentUrl);
+  try {
+    localStorage.setItem(stateStorageKey, params.toString());
+  } catch (error) {
+    console.warn("Could not save URL preferences.", error);
+  }
   const page = document.body.dataset.page || "home";
   const main = document.querySelector("main");
   const iconSpriteUrl = new URL("../icons.svg", document.currentScript.src).href;
+  const contactVerificationConfig = window.ALEXGAMING_CONTACT_VERIFICATION;
   const language = params.get("lang") === "de" ? "de" : "en";
   const iconSvg = name => `<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="${iconSpriteUrl}#${name}"></use></svg>`;
 
@@ -13,12 +39,25 @@
       about: "Über mich",
       channels: "Kanäle",
       contact: "Kontakt",
+      privacy: "Datenschutz",
+      imprint: "Impressum",
+      docs: "Dokumentation",
+      docsNav: "Auf dieser Seite",
       navLabel: "Hauptnavigation",
       languageLabel: "Sprache auswählen",
       accessibilityLabel: "Barrierefreiheit umschalten",
       accessibility: "Barrierefrei",
       footer: "© 2026 alexgamingdev",
-      footerLinks: {home: "Über mich", about: "Kanäle", channels: "Kontakt", contact: "Startseite"},
+      footerLinks: {home: "Über mich", about: "Kanäle", channels: "Kontakt", contact: "Startseite", privacy: "Startseite", imprint: "Startseite", docs: "Startseite"},
+      footerDocs: "Dokumentation",
+      contactVerification: {
+        prompt: "Bestätige kurz, dass du ein Mensch bist, um die Kontaktdaten lesbar anzuzeigen.",
+        loading: "Barrierefreie Prüfung wird geladen …",
+        unavailable: "Die menschliche Prüfung ist noch nicht eingerichtet. Bitte nutze bis dahin das Kontaktformular.",
+        failed: "Die Prüfung war nicht erfolgreich. Bitte versuche es erneut oder nutze das Kontaktformular.",
+        form: "Kontaktformular öffnen",
+        verified: "Bestätigt. Kontaktdaten werden jetzt lesbar angezeigt."
+      },
       pages: {
         home: {
           title: "Alexander Dennhoven | Softwareentwickler & Creator | alexgamingdev",
@@ -26,19 +65,34 @@
           keywords: "Alexander Dennhoven, alexgamingdev, Softwareentwickler, Softwareentwicklung, Softwarearchitektur, Open Source, Content Creator, Tech Content"
         },
         about: {
-          title: "Über mich | Alexander Dennhoven | Softwareentwickler & Creator",
+          title: "Über mich | Alexander Dennhoven | alexgamingdev",
           description: "Mehr über Alexander Dennhoven, bekannt als alexgamingdev: Softwareentwicklung, Architektur, Content Creation und der Blick auf gute digitale Produkte.",
           keywords: "Alexander Dennhoven, alexgamingdev, Über mich, Softwareentwickler, Softwarearchitektur, Content Creator, Softwareentwicklung"
         },
         channels: {
-          title: "Kanäle & Profile | alexgamingdev | GitHub, YouTube & mehr",
+          title: "Profile | Alexander Dennhoven | alexgamingdev",
           description: "Alle offiziellen Profile von Alexander Dennhoven: GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch und weitere soziale und technische Kanäle.",
           keywords: "alexgamingdev, Alexander Dennhoven, GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch, TikTok, Entwicklerprofil"
         },
         contact: {
-          title: "Kontakt | Alexander Dennhoven | Softwareentwickler & Content Creator",
+          title: "Kontakt | Alexander Dennhoven | alexgamingdev",
           description: "Kontakt zu Alexander Dennhoven, bekannt als alexgamingdev, für Zusammenarbeit, technische Ideen, Freelance und Vernetzung rund um Softwareentwicklung.",
           keywords: "Alexander Dennhoven kontaktieren, alexgamingdev, Zusammenarbeit, Freelance, Softwareentwicklung, Vernetzung, Technik"
+        },
+        privacy: {
+          title: "Datenschutz | Alexander Dennhoven | alexgamingdev",
+          description: "Informationen zur Verarbeitung personenbezogener Daten auf der Website von Alexander Dennhoven, bekannt als alexgamingdev.",
+          keywords: "Datenschutz, Privatsphäre, alexgamingdev, Cloudflare, GitHub Pages, Formspree"
+        },
+        imprint: {
+          title: "Impressum | Alexander Dennhoven | alexgamingdev",
+          description: "Anbieterkennzeichnung und Kontaktangaben von Alexander Dennhoven, online bekannt als alexgamingdev.",
+          keywords: "Impressum, Anbieterkennzeichnung, Alexander Dennhoven, alexgamingdev"
+        },
+        docs: {
+          title: "Dokumentation | Alexander Dennhoven | alexgamingdev",
+          description: "Ein Wegweiser durch das Portfolio von alexgamingdev: Seiten, Barrierefreiheit, Spracheinstellungen, Datenschutz und ein verstecktes Arcade-Easter-Egg.",
+          keywords: "alexgamingdev Portfolio Dokumentation, Website Wegweiser, Barrierefreiheit, Sprache, Easter Egg"
         }
       },
       homeContent: {
@@ -76,6 +130,7 @@
         contactEyebrow: "GUTE IDEEN SIND TEAMWORK",
         contactTitle: "Was können wir<br><span>gemeinsam bauen?</span>",
         contactIntro: "Du hast eine Idee, möchtest über Zusammenarbeit sprechen oder dich einfach vernetzen? Ich freue mich auf den Austausch.",
+        contactDetails: "E-Mail: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev · Telefon: +49 [eins sieben sechs] [sechs sechs drei acht eins eins neun drei]",
         contactCta: `Kontakt aufnehmen ${iconSvg("arrow-up-right")}`,
         linkedIn: "LinkedIn-Profil ansehen"
       },
@@ -116,14 +171,16 @@
         profilesLabel: "Social-Media- und Entwicklerprofile",
         items: [
           ["Code, Projekte & Open Source", "github.com/alexgamingdev"],
+          ["Älteres Konto", "github.com/alexgamingstudios", "GitHub (alt)"],
           ["Videos & technische Einblicke", "youtube.com/@alexgamingdev"],
-          ["Gedanken & Community", "alexgamingdev.de"],
-          ["Berufliche Einblicke & Vernetzung", "in/alexander-dennhoven"],
+          ["Gedanken & Community", "alexgaming.is-a.dev"],
+          ["Berufliche Einblicke & Vernetzung", "linkedin.com/in/alexgamingdev"],
           ["Soziale Netzwerke", "@alexgamingdev"],
-          ["Soziale Netzwerke", "@alexgamingdev"],
+          ["Soziale Netzwerke", "@alexgaming.dev"],
           ["Videos", "@alexgamingdev"],
           ["Livestreams", "twitch.tv/alexgamingdev"],
-          ["Fediverse", "@alexgamingdev"],
+          ["Fediverse", "mastodon.social/@alexgamingdev"],
+          ["Fediverse", "mstdn.social/@alexgamingdev", "Mastodon (mstdn.social)"],
           ["Profil", "pinterest.com/alexgamingdev"],
           ["Pakete", "npmjs.com/~alexgamingdev"],
           ["Alle Links auf einen Blick", "linktr.ee/alexgamingdev"],
@@ -135,6 +192,7 @@
         eyebrow: "KONTAKT & ZUSAMMENARBEIT",
         title: 'Eine gute Idee<br><span style="color:var(--accent)">fängt mit einem Gespräch an.</span>',
         intro: "Du planst ein Projekt, suchst einen Sparringspartner für eine technische Idee oder möchtest dich vernetzen? Schreib mir über das Formular oder eines meiner Profile.",
+        details: "E-Mail: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev · Telefon: +49 [eins sieben sechs] [sechs sechs drei acht eins eins neun drei]",
         headings: ["Worüber wir sprechen können", "Vorher noch stöbern?"],
         description: "Zusammenarbeit an spannenden Softwareprojekten, technische Konzepte und Architektur, Freelance-Anfragen oder der Austausch rund um moderne Softwareentwicklung und Content Creation.",
         form: {
@@ -147,6 +205,36 @@
         },
         linkedIn: `Auf LinkedIn vernetzen ${iconSvg("arrow-up-right")}`,
         bluesky: `Auf BlueSky schreiben ${iconSvg("arrow-up-right")}`
+      },
+      privacyContent: {
+        eyebrow: "DATENSCHUTZ",
+        title: "Deine Daten.<br><span style=\"color:var(--accent)\">Transparent erklärt.</span>",
+        intro: "Diese Hinweise erklären, welche Daten beim Besuch dieser Website verarbeitet werden und welche Rechte du hast.",
+        headings: ["Verantwortlicher", "Hosting, DNS und Server-Protokolle", "Kontaktformular und externe Links", "Lokale Einstellungen und Schriftarten", "Deine Rechte"],
+        paragraphs: [
+          "Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Website ist Alexander Dennhoven, online bekannt als alexgamingdev. Kontakt: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev. Die Telefonnummer wird zum Schutz vor automatisierter Erfassung ausgeschrieben: +49 [eins sieben sechs] [sechs sechs drei acht eins eins neun drei].",
+          "Die Website wird als statische Website über GitHub Pages bereitgestellt. Die Domain wird über das is-a.dev-Projekt verwaltet; DNS wird über Cloudflare bereitgestellt. GitHub Pages verarbeitet die Website-Aufrufe und kann technische Verbindungsdaten wie IP-Adresse, Zeitpunkt, angeforderte URL, Referrer, Browserkennung und Statuscode in Server- und Sicherheitsprotokollen verarbeiten. Cloudflare kann DNS-Anfragedaten verarbeiten; falls ein Proxy aktiviert ist, können auch Website-Aufrufdaten verarbeitet werden. Das is-a.dev-Projekt verwaltet die Domain-Registrierung. Es gelten zusätzlich die Datenschutzhinweise der jeweiligen Anbieter.",
+          "Wenn du das Kontaktformular nutzt, werden die eingegebenen Angaben zur Bearbeitung deiner Nachricht an Formspree übermittelt. Bitte sende keine sensiblen oder besonders geschützten Informationen. Für die Verarbeitung durch Formspree gelten deren Datenschutzbestimmungen. Links zu sozialen Netzwerken und anderen externen Diensten führen erst nach deinem Klick zu deren Anbietern; dort gelten deren jeweilige Datenschutzbestimmungen. Wenn der Verifizierungsdienst eingerichtet ist und du im Barrierefreiheitsmodus lesbare Kontaktdaten anforderst, wird Cloudflare Turnstile zur menschlichen Prüfung geladen. Dabei verarbeitet Cloudflare technische Verbindungsdaten, einschließlich deiner IP-Adresse. Für individuell freigegebene Profil-Exporte verarbeitet der Cloudflare Worker die Anfrage einschließlich der persönlichen Zugangs-URL sowie technische Verbindungsdaten wie die IP-Adresse. Der Zugang schaltet ausschließlich kuratierte öffentliche Profildaten frei und kann widerrufen werden. In Cloudflare KV wird nur ein SHA-256-Hash des Zugangstokens mit einem Freigabestatus abgelegt. Die Antworten sind als nicht-cachebar markiert; Cloudflare kann dennoch notwendige Sicherheits- und Betriebsdaten verarbeiten.",
+          "Diese Website setzt keine Analyse- oder Werbe-Cookies. Eine Spracheinstellung, der Barrierefreiheitsmodus und weitere URL-Parameter können in deinem Browser im localStorage gespeichert werden, damit die gewählten Einstellungen bei der Navigation erhalten bleiben. Die Website lädt Schriftarten von Google Fonts; beim Laden wird eine Verbindung zu Google hergestellt, wobei technische Verbindungsdaten übertragen werden können. Du kannst externe Schriftarten durch Browser-Einstellungen oder Erweiterungen blockieren. Einzelheiten stehen in den Datenschutzhinweisen von Google.",
+          "Du hast im Rahmen der gesetzlichen Voraussetzungen Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Du kannst dich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren. Für Anfragen nutze bitte das Kontaktformular oder die oben angegebene, gegen automatische Erfassung geschützte E-Mail-Adresse."
+        ],
+        links: ["Kontaktformular öffnen"],
+        providerLinks: {
+          github: "GitHub-Datenschutzhinweise",
+          cloudflare: "Cloudflare-Datenschutzerklärung",
+          isadev: "is-a.dev-Projekt",
+          formspree: "Datenschutzhinweise von Formspree",
+          google: "Google-Datenschutzerklärung"
+        }
+      },
+      imprintContent: {
+        eyebrow: "IMPRESSUM",
+        title: 'Anbieterinformationen.<br><span style="color:var(--accent)">Klar und erreichbar.</span>',
+        intro: "Angaben zum Anbieter dieser Website.",
+        headings: ["Anbieter", "Kontakt", "Datenschutz"],
+        contact: "E-Mail: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev<br>Telefon: +49 [eins sieben sechs] [sechs sechs drei acht eins eins neun drei]",
+        contactForm: "Kontaktformular",
+        privacyText: 'Informationen zur Verarbeitung personenbezogener Daten stehen in der <a href="../privacy/">Datenschutzerklärung</a>.'
       }
     },
     en: {
@@ -155,12 +243,25 @@
       about: "About",
       channels: "Channels",
       contact: "Contact",
+      privacy: "Privacy",
+      imprint: "Imprint",
+      docs: "Documentation",
+      docsNav: "On this page",
       navLabel: "Main navigation",
       languageLabel: "Choose language",
       accessibilityLabel: "Toggle accessibility mode",
       accessibility: "Accessibility",
       footer: "© 2026 alexgamingdev",
-      footerLinks: {home: "About", about: "Channels", channels: "Contact", contact: "Home"},
+      footerLinks: {home: "About", about: "Channels", channels: "Contact", contact: "Home", privacy: "Home", imprint: "Home", docs: "Home"},
+      footerDocs: "Documentation",
+      contactVerification: {
+        prompt: "Complete a quick human check to view readable contact details.",
+        loading: "Loading the accessible verification …",
+        unavailable: "Human verification is not configured yet. Please use the contact form in the meantime.",
+        failed: "Verification was not successful. Please try again or use the contact form.",
+        form: "Open the contact form",
+        verified: "Verified. Contact details are now readable."
+      },
       pages: {
         home: {
           title: "Alexander Dennhoven | Software Developer & Creator | alexgamingdev",
@@ -168,19 +269,34 @@
           keywords: "Alexander Dennhoven, alexgamingdev, software developer, software engineering, software architecture, open source, content creator, tech content"
         },
         about: {
-          title: "About | Alexander Dennhoven | Software Developer & Creator",
+          title: "About | Alexander Dennhoven | alexgamingdev",
           description: "Learn more about Alexander Dennhoven, known as alexgamingdev, and his approach to software engineering, architecture and digital storytelling.",
           keywords: "Alexander Dennhoven, alexgamingdev, about, software developer, software architecture, content creator, software engineering"
         },
         channels: {
-          title: "Channels & Profiles | alexgamingdev | GitHub, YouTube & more",
+          title: "Profiles | Alexander Dennhoven | alexgamingdev",
           description: "Official profiles of Alexander Dennhoven: GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch and other social and developer channels.",
           keywords: "alexgamingdev, Alexander Dennhoven, GitHub, YouTube, LinkedIn, BlueSky, Instagram, Twitch, TikTok, developer profile"
         },
         contact: {
-          title: "Contact | Alexander Dennhoven | Software Developer & Content Creator",
+          title: "Contact | Alexander Dennhoven | alexgamingdev",
           description: "Contact Alexander Dennhoven, known as alexgamingdev, for collaboration, technical ideas, freelance work and networking in software development.",
           keywords: "contact Alexander Dennhoven, alexgamingdev, collaboration, freelance, software development, networking, technology"
+        },
+        privacy: {
+          title: "Privacy | Alexander Dennhoven | alexgamingdev",
+          description: "How the website of Alexander Dennhoven, known as alexgamingdev, processes personal data.",
+          keywords: "privacy, data protection, alexgamingdev, Cloudflare, GitHub Pages, Formspree"
+        },
+        imprint: {
+          title: "Imprint | Alexander Dennhoven | alexgamingdev",
+          description: "Provider information and contact details for Alexander Dennhoven, known online as alexgamingdev.",
+          keywords: "imprint, legal notice, Alexander Dennhoven, alexgamingdev"
+        },
+        docs: {
+          title: "Website guide | Alexander Dennhoven | alexgamingdev",
+          description: "A friendly guide to the alexgamingdev portfolio: its pages, accessibility, language settings, privacy, and a hidden arcade Easter egg.",
+          keywords: "alexgamingdev portfolio documentation, website guide, accessibility, language, Easter egg"
         }
       },
       homeContent: {
@@ -218,6 +334,7 @@
         contactEyebrow: "GREAT IDEAS ARE A TEAM EFFORT",
         contactTitle: "What could we<br><span>build together?</span>",
         contactIntro: "Have an idea, want to discuss working together or simply connect? I’d love to hear from you.",
+        contactDetails: "Email: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev · Phone: +49 [one seven six] [six six three eight one one nine three]",
         contactCta: `Get in touch ${iconSvg("arrow-up-right")}`,
         linkedIn: "View my LinkedIn profile"
       },
@@ -258,14 +375,16 @@
         profilesLabel: "Social media and developer profiles",
         items: [
           ["Code, projects & open source", "github.com/alexgamingdev"],
+          ["Previous account", "github.com/alexgamingstudios", "GitHub (legacy)"],
           ["Videos & technical insights", "youtube.com/@alexgamingdev"],
-          ["Thoughts & community", "alexgamingdev.de"],
-          ["Professional updates & networking", "in/alexander-dennhoven"],
+          ["Thoughts & community", "alexgaming.is-a.dev"],
+          ["Professional updates & networking", "linkedin.com/in/alexgamingdev"],
           ["Social network", "@alexgamingdev"],
-          ["Social network", "@alexgamingdev"],
+          ["Social network", "@alexgaming.dev"],
           ["Videos", "@alexgamingdev"],
           ["Livestreams", "twitch.tv/alexgamingdev"],
-          ["Fediverse", "@alexgamingdev"],
+          ["Fediverse", "mastodon.social/@alexgamingdev"],
+          ["Fediverse", "mstdn.social/@alexgamingdev", "Mastodon (mstdn.social)"],
           ["Profile", "pinterest.com/alexgamingdev"],
           ["Packages", "npmjs.com/~alexgamingdev"],
           ["All my links in one place", "linktr.ee/alexgamingdev"],
@@ -277,6 +396,7 @@
         eyebrow: "CONTACT & COLLABORATION",
         title: 'Every good idea<br><span>starts with a conversation.</span>',
         intro: "Planning a project, looking for a sounding board for a technical idea, or simply want to connect? Send me a message using the form or reach out through one of my profiles.",
+        details: "Email: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev · Phone: +49 [one seven six] [six six three eight one one nine three]",
         headings: ["What we could talk about", "Want to explore first?"],
         description: "Collaborating on interesting software projects, technical concepts and architecture, freelance opportunities, or exchanging ideas about modern software development and content creation.",
         form: {
@@ -289,6 +409,36 @@
         },
         linkedIn: `Connect on LinkedIn ${iconSvg("arrow-up-right")}`,
         bluesky: `Message me on BlueSky ${iconSvg("arrow-up-right")}`
+      },
+      privacyContent: {
+        eyebrow: "PRIVACY",
+        title: "Your data.<br><span style=\"color:var(--accent)\">Clearly explained.</span>",
+        intro: "This notice explains what data is processed when you visit this website and what rights you have.",
+        headings: ["Controller", "Hosting, DNS and server logs", "Contact form and external links", "Local settings and fonts", "Your rights"],
+        paragraphs: [
+          "The controller responsible for processing personal data on this website is Alexander Dennhoven, known online as alexgamingdev. Contact: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev. To reduce automated collection, the telephone number is written out: +49 [one seven six] [six six three eight one one nine three].",
+          "This static website is served through GitHub Pages. The domain is managed through the is-a.dev project and DNS is provided through Cloudflare. GitHub Pages handles website requests and may process technical connection data such as your IP address, timestamp, requested URL, referrer, browser user agent and response status in server or security logs. Cloudflare may process DNS lookup data; if proxying is enabled, its services may also process website request data. The is-a.dev project manages domain registration. The providers’ privacy notices also apply.",
+          "If you use the contact form, the information you enter is sent to Formspree so your message can be handled. Please do not submit sensitive or special-category personal data. Formspree’s privacy notice applies to its processing. Social network and other external links connect to those providers only after you click; their own privacy notices then apply. If the verification service is configured and you request readable contact details in accessibility mode, Cloudflare Turnstile is loaded for human verification. Cloudflare processes technical connection data, including your IP address, for this check. For individually approved profile exports, the Cloudflare Worker processes the request, including its personal access URL, and technical connection data such as the IP address. Access reveals only curated public profile information and can be revoked. Cloudflare KV stores only a SHA-256 hash of the access token and an approval status. Responses are marked as non-cacheable; Cloudflare may still process necessary security and operational data.",
+          "This website does not use analytics or advertising cookies. Your language choice, accessibility mode and other URL parameters may be stored in your browser’s localStorage so your settings continue as you navigate. The site loads fonts from Google Fonts; this establishes a connection to Google and may transmit technical connection data. You can block externally hosted fonts through browser settings or extensions. See Google’s privacy notice for details.",
+          "Where applicable, you have rights to access, correct, erase, restrict or object to processing, and to data portability. You may also lodge a complaint with a data protection supervisory authority. For requests, please use the contact form or the email address above, which is intentionally obfuscated against automated collection."
+        ],
+        links: ["Open the contact form"],
+        providerLinks: {
+          github: "GitHub privacy statement",
+          cloudflare: "Cloudflare privacy policy",
+          isadev: "is-a.dev project",
+          formspree: "Formspree privacy policy",
+          google: "Google privacy policy"
+        }
+      },
+      imprintContent: {
+        eyebrow: "IMPRINT",
+        title: 'Provider information.<br><span style="color:var(--accent)">Clearly stated.</span>',
+        intro: "Information about the provider of this website.",
+        headings: ["Service provider", "Contact", "Privacy"],
+        contact: "Email: legacy [at] mail [dot] alexgaming [dot] is-a [dot] dev<br>Phone: +49 [one seven six] [six six three eight one one nine three]",
+        contactForm: "Contact form",
+        privacyText: 'Information about the processing of personal data is available in the <a href="../privacy/">privacy notice</a>.'
       }
     }
   };
@@ -346,13 +496,177 @@
     else element.textContent = value;
   }
 
+  let turnstileScriptPromise;
+  let turnstileWidgetId;
+  let verificationInProgress = false;
+  const decodedContactText = new Map();
+
+  function setVerificationStatus(message, isError = false) {
+    const status = document.querySelector(".contact-verification-status");
+    if (!status) return;
+    status.textContent = message;
+    status.setAttribute("role", isError ? "alert" : "status");
+  }
+
+  function restoreObfuscatedContactDetails() {
+    decodedContactText.forEach((value, node) => {
+      if (node.isConnected) node.textContent = value;
+    });
+    decodedContactText.clear();
+  }
+
+  function revealObfuscatedContactDetails() {
+    const contactPattern = /legacy\s+\[at\]\s+mail\s+\[dot\]\s+alexgaming\s+\[dot\]\s+is-a\s+\[dot\]\s+dev/gi;
+    const phonePattern = /\+49\s+\[(?:one seven six|eins sieben sechs)\]\s+\[(?:six six three eight one one nine three|sechs sechs drei acht eins eins neun drei)\]/gi;
+    const emailParts = ["legacy", "mail", "alexgaming", "is-a", "dev"];
+    const emailAddress = emailParts.reduce((address, part, index) =>
+      `${address}${index === 0 ? "" : String.fromCharCode(index === 1 ? 64 : 46)}${part}`, "");
+    const phoneNumber = [43, 52, 57, 32, 49, 55, 54, 32, 54, 54, 51, 56, 49, 49, 57, 51]
+      .map(code => String.fromCharCode(code))
+      .join("");
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+    while (node) {
+      if (!node.parentElement?.closest("script, style, pre, code")) {
+        const readable = node.textContent
+          .replace(contactPattern, emailAddress)
+          .replace(phonePattern, phoneNumber);
+        if (readable !== node.textContent) {
+          decodedContactText.set(node, node.textContent);
+          node.textContent = readable;
+        }
+      }
+      node = walker.nextNode();
+    }
+  }
+
+  function loadTurnstile() {
+    if (window.turnstile) return Promise.resolve(window.turnstile);
+    if (turnstileScriptPromise) return turnstileScriptPromise;
+
+    turnstileScriptPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        if (window.turnstile) resolve(window.turnstile);
+        else reject(new Error("Cloudflare Turnstile loaded without its API."));
+      };
+      script.onerror = () => reject(new Error("Could not load Cloudflare Turnstile."));
+      document.head.append(script);
+    });
+
+    return turnstileScriptPromise;
+  }
+
+  async function verifyContactToken(token) {
+    if (verificationInProgress) return;
+    verificationInProgress = true;
+    const copy = translations[language].contactVerification;
+    setVerificationStatus(copy.loading);
+
+    try {
+      const endpoint = new URL(contactVerificationConfig.endpoint, window.location.origin);
+      if (endpoint.origin !== window.location.origin) {
+        throw new Error("The verification endpoint must use this website's origin.");
+      }
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({token})
+      });
+      const result = await response.json();
+      if (!response.ok || result.verified !== true) {
+        throw new Error(typeof result.error === "string" ? result.error : copy.failed);
+      }
+      if (!document.body.classList.contains("a11y-mode")) return;
+      revealObfuscatedContactDetails();
+      setVerificationStatus(copy.verified);
+    } catch (error) {
+      console.error("Contact-detail verification failed.", error);
+      setVerificationStatus(error.message || copy.failed, true);
+      if (turnstileWidgetId !== undefined && window.turnstile) {
+        window.turnstile.reset(turnstileWidgetId);
+      }
+    } finally {
+      verificationInProgress = false;
+    }
+  }
+
+  function setupContactVerification(enabled) {
+    let panel = document.querySelector(".contact-verification");
+    if (!panel) {
+      const details = document.querySelector(".contact-details, [data-contact-details], .imprint-contact-details, .privacy-controller-contact");
+      if (!details) return;
+
+      panel = document.createElement("div");
+      panel.className = "contact-verification";
+      panel.hidden = true;
+
+      const status = document.createElement("p");
+      status.className = "contact-verification-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      status.textContent = translations[language].contactVerification.prompt;
+      panel.append(status);
+
+      const challenge = document.createElement("div");
+      challenge.className = "contact-verification-widget";
+      panel.append(challenge);
+
+      const formLink = document.createElement("a");
+      formLink.className = "contact-verification-form";
+      formLink.href = new URL("/contact/", window.location.origin).href;
+      formLink.textContent = translations[language].contactVerification.form;
+      panel.append(formLink);
+      details.insertAdjacentElement("afterend", panel);
+    }
+
+    panel.hidden = !enabled;
+    if (!enabled) {
+      restoreObfuscatedContactDetails();
+      if (turnstileWidgetId !== undefined && window.turnstile) {
+        window.turnstile.reset(turnstileWidgetId);
+      }
+      return;
+    }
+
+    const copy = translations[language].contactVerification;
+    const widget = panel.querySelector(".contact-verification-widget");
+    const formLink = panel.querySelector(".contact-verification-form");
+    formLink.textContent = copy.form;
+
+    if (!contactVerificationConfig?.siteKey) {
+      setVerificationStatus(copy.unavailable, true);
+      return;
+    }
+
+    if (turnstileWidgetId !== undefined) return;
+    setVerificationStatus(copy.prompt);
+    loadTurnstile().then(turnstile => {
+      if (!document.body.classList.contains("a11y-mode") || !widget.isConnected) return;
+      turnstileWidgetId = turnstile.render(widget, {
+        sitekey: contactVerificationConfig.siteKey,
+        action: "reveal_contact_details",
+        callback: verifyContactToken,
+        "error-callback": () => setVerificationStatus(copy.failed, true),
+        "expired-callback": () => setVerificationStatus(copy.prompt)
+      });
+    }).catch(error => {
+      console.error("Could not initialize contact verification.", error);
+      setVerificationStatus(copy.failed, true);
+    });
+  }
+
   function applyCommonLanguage(copy) {
     document.documentElement.lang = language === "en" ? "en" : "de-DE";
     document.querySelector(".skip-link").textContent = copy.skip;
     const nav = document.querySelector(".main-nav");
     nav.setAttribute("aria-label", copy.navLabel);
-    nav.querySelector('a[href*="about"]').textContent = copy.about;
-    nav.querySelector('a[href*="channels"]').textContent = copy.channels;
+    const navLinks = nav.querySelectorAll(":scope > a");
+    navLinks[0].textContent = copy.about;
+    navLinks[1].textContent = copy.channels;
     const contactLink = nav.querySelector(".nav-cta");
     contactLink.innerHTML = `${copy.contact} ${iconSvg("arrow-up-right")}`;
     document.querySelector(".brand").setAttribute("aria-label", `alexgamingdev – ${copy.home}`);
@@ -369,6 +683,12 @@
     accessibilityButton.textContent = copy.accessibility;
     accessibilityButton.setAttribute("aria-label", copy.accessibilityLabel);
     document.querySelector(".footer-inner > p").textContent = copy.footer;
+    const privacyLink = document.querySelector(".footer-privacy");
+    if (privacyLink) privacyLink.textContent = copy.privacy;
+    const imprintLink = document.querySelector(".footer-imprint");
+    if (imprintLink) imprintLink.textContent = copy.imprint;
+    const docsLink = document.querySelector(".footer-docs");
+    if (docsLink) docsLink.textContent = copy.footerDocs;
     const footerLink = document.querySelector(".footer-inner .back-to-top");
     if (footerLink) footerLink.innerHTML = `${copy.footerLinks[page]} ${iconSvg("arrow-up-right")}`;
   }
@@ -407,6 +727,7 @@
     setText(".contact-content .eyebrow", copy.contactEyebrow);
     setText(".contact-content h2", copy.contactTitle, true);
     setText(".contact-content > p:not(.eyebrow)", copy.contactIntro);
+    setText(".contact-details", copy.contactDetails);
     setText(".contact-content .button", copy.contactCta, true);
     setText(".contact-secondary", copy.linkedIn);
   }
@@ -457,6 +778,8 @@
     });
     const description = document.querySelector("[data-contact-description]");
     if (description) description.textContent = copy.description;
+    const contactDetails = document.querySelector("[data-contact-details]");
+    if (contactDetails) contactDetails.textContent = copy.details;
     const formHeading = document.querySelector("[data-form-heading]");
     if (formHeading) formHeading.textContent = copy.form.heading;
     document.querySelectorAll("[data-form-label]").forEach(element => {
@@ -475,6 +798,38 @@
     if (bluesky) bluesky.innerHTML = copy.bluesky;
   }
 
+  function applyPrivacyLanguage(copy) {
+    setText(".subpage-hero .eyebrow", copy.eyebrow);
+    setText(".subpage-hero h1", copy.title, true);
+    setText(".subpage-hero > p:last-child", copy.intro);
+    document.querySelectorAll(".content-panel").forEach((panel, index) => {
+      const heading = panel.querySelector("h2");
+      if (heading) heading.textContent = copy.headings[index];
+      if (copy.paragraphs[index]) {
+        const paragraph = panel.querySelector("p");
+        if (paragraph) paragraph.textContent = copy.paragraphs[index];
+      }
+    });
+    const contactLink = document.querySelector("[data-privacy-contact]");
+    if (contactLink) contactLink.textContent = copy.links[0];
+    document.querySelectorAll("[data-privacy-link]").forEach(link => {
+      const provider = link.dataset.privacyLink;
+      if (provider && copy.providerLinks[provider]) link.textContent = copy.providerLinks[provider];
+    });
+  }
+
+  function applyImprintLanguage(copy) {
+    setText(".subpage-hero .eyebrow", copy.eyebrow);
+    setText(".subpage-hero h1", copy.title, true);
+    setText(".subpage-hero > p:last-child", copy.intro);
+    document.querySelectorAll("[data-imprint-heading]").forEach((heading, index) => {
+      if (copy.headings[index]) heading.textContent = copy.headings[index];
+    });
+    setText(".imprint-contact-details", copy.contact, true);
+    setText("[data-imprint-form]", copy.contactForm);
+    setText("[data-imprint-privacy]", copy.privacyText, true);
+  }
+
   function applyLanguage() {
     const copy = translations[language];
     applyCommonLanguage(copy);
@@ -485,17 +840,21 @@
     document.querySelector('meta[property="og:title"]').content = pageCopy.title;
     document.querySelector('meta[property="og:description"]').content = pageCopy.description;
     document.querySelector('meta[property="og:locale"]').content = language === "en" ? "en_US" : "de_DE";
-    document.querySelector('meta[name="twitter:title"]').content = pageCopy.title;
-    document.querySelector('meta[name="twitter:description"]').content = pageCopy.description;
+    const alternateLocale = document.querySelector('meta[property="og:locale:alternate"]');
+    if (alternateLocale) alternateLocale.content = language === "en" ? "de_DE" : "en_US";
+    const openGraphUrl = document.querySelector('meta[property="og:url"]');
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
       const canonicalUrl = new URL(canonical.href);
-      canonicalUrl.search = language === "en" ? "?lang=en" : "";
+      canonicalUrl.search = language === "de" ? "?lang=de" : "";
       canonical.href = canonicalUrl.href;
+      if (openGraphUrl) openGraphUrl.content = canonicalUrl.href;
     }
+    document.querySelector('meta[name="twitter:title"]').content = pageCopy.title;
+    document.querySelector('meta[name="twitter:description"]').content = pageCopy.description;
     document.querySelectorAll('link[hreflang][rel="alternate"]').forEach(link => {
       const alternate = new URL(link.href);
-      alternate.search = link.hreflang === "en" ? "?lang=en" : "";
+      alternate.search = link.hreflang === "de" ? "?lang=de" : "";
       link.href = alternate.href;
     });
     const structuredData = document.querySelector('script[type="application/ld+json"]');
@@ -516,10 +875,9 @@
         }
         if (types.includes("Person")) {
           item.jobTitle = language === "en" ? "Software Developer and Content Creator" : "Softwareentwickler und Content Creator";
-          item.description = pageCopy.description;
+          item.description = copy.pages.home.description;
         }
-        if (types.includes("WebSite")) item.inLanguage = document.documentElement.lang;
-        if (item.inLanguage) item.inLanguage = document.documentElement.lang;
+        if (item.inLanguage && !types.includes("WebSite")) item.inLanguage = document.documentElement.lang;
         Object.values(item).forEach(updateSchema);
       };
       updateSchema(schema);
@@ -530,81 +888,19 @@
     if (page === "about") applyAboutLanguage(copy.aboutContent);
     if (page === "channels") applyChannelsLanguage(copy.channelsContent);
     if (page === "contact") applyContactLanguage(copy.contactContent);
-  }
-
-  function inlineMarkdown(node) {
-    return [...node.childNodes].map(child => {
-      if (child.nodeType === Node.TEXT_NODE) return child.textContent.trim();
-      if (child.nodeType !== Node.ELEMENT_NODE) return "";
-      if (child.matches("br")) return "\n";
-      if (child.matches("a")) return `[${text(child)}](${child.href})`;
-      return inlineMarkdown(child);
-    }).filter(Boolean).join(" ").replace(/\s+([,.;:!?])/g, "$1");
-  }
-
-  function markdownFromPage() {
-    const lines = [];
-    const title = document.querySelector("h1");
-    if (title) lines.push(`# ${text(title)}`, "");
-
-    for (const node of main.querySelectorAll("h2, h3, p, li, a.profile-link, a.channel-card")) {
-      if (node.matches("h3, p, li") && node.closest(".profile-grid, .channel-grid")) continue;
-      if (node.matches("h2, h3")) {
-        lines.push(`${node.tagName === "H2" ? "##" : "###"} ${text(node)}`, "");
-      } else if (node.matches("li")) {
-        lines.push(`- ${inlineMarkdown(node)}`);
-      } else if (node.matches("a.profile-link, a.channel-card")) {
-        const label = text(node.querySelector("strong, h3")) || text(node);
-        const description = node.matches(".profile-link")
-          ? [...node.querySelectorAll("span")].slice(0, -1).map(text).join(" — ")
-          : text(node.querySelector("div > p:last-child"));
-        lines.push(`- [${label}](${node.href})${description ? ` — ${description}` : ""}`);
-      } else if (node.matches("p") && text(node)) {
-        lines.push(`${inlineMarkdown(node)}`, "");
-      }
+    if (page === "privacy") applyPrivacyLanguage(copy.privacyContent);
+    if (page === "imprint") applyImprintLanguage(copy.imprintContent);
+    if (page === "docs") {
+      document.querySelectorAll("[data-doc-language]").forEach(section => {
+        section.hidden = section.dataset.docLanguage !== language;
+      });
+      document.querySelector(".docs-toc")?.setAttribute("aria-label", copy.docsNav);
     }
-
-    return lines.join("\n").trim() + "\n";
-  }
-
-  function jsonFromPage() {
-    const pageTitle = document.title;
-    const canonical = document.querySelector('link[rel="canonical"]')?.href || window.location.href;
-    const sections = [...main.querySelectorAll("section")].map(section => ({
-      heading: text(section.querySelector("h1, h2") || section),
-      text: text(section),
-      links: [...section.querySelectorAll("a[href]")].map(link => ({
-        label: text(link),
-        url: link.href
-      }))
-    }));
-    const profiles = [...document.querySelectorAll('a[href^="https://"]')]
-      .filter(link => link.closest(".channel-grid, .profile-grid"))
-      .map(link => ({name: text(link.querySelector("strong, h3") || link), url: link.href}));
-
-    return JSON.stringify({
-      name: "Alexander Dennhoven",
-      alternateName: "alexgamingdev",
-      title: pageTitle,
-      description: document.querySelector('meta[name="description"]')?.content || "",
-      url: canonical,
-      page,
-      language,
-      sections,
-      profiles
-    }, null, 2) + "\n";
-  }
-
-  function renderText(content, type) {
-    document.title = `${type.toUpperCase()} | ${document.title}`;
-    document.body.classList.add("text-response");
-    const pre = document.createElement("pre");
-    pre.textContent = content;
-    document.body.replaceChildren(pre);
   }
 
   function setAccessibility(enabled, updateUrl) {
     document.body.classList.toggle("a11y-mode", enabled);
+    setupContactVerification(enabled);
     window.dispatchEvent(new CustomEvent("accessibilitymodechange", { detail: { enabled } }));
     const accessibilityButton = document.querySelector(".a11y-toggle");
     accessibilityButton?.setAttribute("aria-pressed", String(enabled));
@@ -617,8 +913,59 @@
       if (enabled) updated.searchParams.set("a11y", "true");
       else updated.searchParams.delete("a11y");
       window.history.replaceState({}, "", updated);
+      params = new URLSearchParams(updated.search);
+      try {
+        localStorage.setItem(stateStorageKey, params.toString());
+      } catch (error) {
+        console.warn("Could not save URL preferences.", error);
+      }
     }
   }
+
+  const arcadeSequence = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  let arcadeSequenceProgress = 0;
+  document.body.classList.toggle("arcade-mode", params.get("easter") === "arcade");
+  document.addEventListener("keydown", event => {
+    if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+    const expectedKey = arcadeSequence[arcadeSequenceProgress];
+    if (event.key.toLowerCase() !== expectedKey.toLowerCase()) {
+      arcadeSequenceProgress = event.key === arcadeSequence[0] ? 1 : 0;
+      return;
+    }
+
+    arcadeSequenceProgress += 1;
+    if (arcadeSequenceProgress !== arcadeSequence.length) return;
+
+    arcadeSequenceProgress = 0;
+    const enabled = !document.body.classList.contains("arcade-mode");
+    document.body.classList.toggle("arcade-mode", enabled);
+    const updated = new URL(window.location.href);
+    if (enabled) updated.searchParams.set("easter", "arcade");
+    else updated.searchParams.delete("easter");
+    window.history.replaceState({}, "", updated);
+    params = new URLSearchParams(updated.search);
+    try {
+      localStorage.setItem(stateStorageKey, params.toString());
+    } catch (error) {
+      console.warn("Could not save URL preferences.", error);
+    }
+  });
+
+  document.addEventListener("click", event => {
+    const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    if (!link || link.target === "_blank") return;
+    const target = new URL(link.href, window.location.href);
+    if (target.origin !== window.location.origin) return;
+    params.forEach((value, key) => {
+      if (!target.searchParams.has(key)) target.searchParams.set(key, value);
+    });
+    link.href = target.href;
+    try {
+      localStorage.setItem(stateStorageKey, target.searchParams.toString());
+    } catch (error) {
+      console.warn("Could not save URL preferences.", error);
+    }
+  });
 
   applyLanguage();
   setAccessibility(params.get("a11y") === "true", false);
@@ -629,9 +976,6 @@
     const button = document.querySelector(".a11y-toggle");
     setAccessibility(button.getAttribute("aria-pressed") !== "true", true);
   });
-
-  if (params.get("type") === "md") renderText(markdownFromPage(), "md");
-  if (params.get("type") === "json") renderText(jsonFromPage(), "json");
 
   document.querySelector(".skip-link")?.addEventListener("click", () => {
     main?.focus();

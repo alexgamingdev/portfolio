@@ -1,8 +1,8 @@
 {
   "name": "Alexander Dennhoven – alexgamingdev",
   "short_name": "alexgamingdev",
-  "description": "Portfolio von Alexander Dennhoven, Softwareentwickler und Content Creator.",
-  "lang": "de-DE",
+  "description": "Portfolio of Alexander Dennhoven, software developer and content creator.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
